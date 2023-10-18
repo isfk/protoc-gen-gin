@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package demo;
+
+option go_package = "github.com/isfk/protoc-gen-gin/demo;demo";
+
+service DemoService {
+  // Hello godoc
+  // @Summary Say Hello
+  // @Description say hello
+  // @Tags      hello
+  // @Accept    json
+  // @Produce   json
+  // @Param     args  SayRequest
+  // @Success   200   {array}   SayResponse
+  // @Failure   400   {object}  httputil.HTTPError
+  // @Failure   404   {object}  httputil.HTTPError
+  // @Failure   500   {object}  httputil.HTTPError
+  // @Router    /hello  [get]
+
+  // 你好你好
+  rpc Hello(HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string msg = 1;
+}
