@@ -60,13 +60,13 @@ func NewExampleService_GinServerHandler(handler ExampleService_GinClientHandler)
 func (s ExampleService_GinServerHandlerImpl) Hello(c *gin.Context) {
 	var args HelloRequest
 	if err := c.Bind(&args); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "msg": err.Error()})
+		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
 		return
 	}
 
 	resp, err := s.Handler.Hello(&args)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": 500, "msg": err.Error()})
+		c.JSON(http.StatusOK, gin.H{"code": 500, "msg": err.Error()})
 		return
 	}
 
@@ -90,13 +90,13 @@ func (s ExampleService_GinServerHandlerImpl) Hello(c *gin.Context) {
 func (s ExampleService_GinServerHandlerImpl) Say(c *gin.Context) {
 	var args SayRequest
 	if err := c.Bind(&args); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "msg": err.Error()})
+		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
 		return
 	}
 
 	resp, err := s.Handler.Say(&args)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": 500, "msg": err.Error()})
+		c.JSON(http.StatusOK, gin.H{"code": 500, "msg": err.Error()})
 		return
 	}
 
