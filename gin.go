@@ -10,7 +10,7 @@ import (
 
 const (
 	httpPackage        = protogen.GoImportPath("net/http")
-	ginPackage        = protogen.GoImportPath("github.com/gin-gonic/gin")
+	ginPackage         = protogen.GoImportPath("github.com/gin-gonic/gin")
 	deprecationComment = "// Deprecated: Do not use."
 )
 
@@ -66,6 +66,28 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 			continue
 		}
 
+		swagStr := strings.TrimSuffix(method.Comments.Leading.String(), "\n")
+		bindStr := "Bind"
+		trialingStr := ""
+		if len(method.Comments.Trailing.String()) > 0 { // xxxxxxx|bind=BindUri
+			trialArr := strings.Split(method.Comments.Trailing.String(), "|")
+			for _, trial := range trialArr {
+				if strings.Contains(trial, "=") {
+					trialItem := strings.Split(trial, "=")
+					if len(trialItem) == 2 {
+						if strings.Contains(trialItem[0], "bind") {
+							bindStr = strings.TrimSpace(trialItem[1])
+						}
+					}
+				} else {
+					trialingStr += trial
+				}
+			}
+		}
+		if len(strings.TrimSpace(trialingStr)) > 0 {
+			swagStr += "\n" + strings.TrimSpace(trialingStr)
+		}
+
 		sd.Methods = append(sd.Methods, &methodDesc{
 			Name:         method.GoName,
 			OriginalName: string(method.Desc.Name()),
@@ -79,7 +101,8 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 			HasBody:      false,
 			Body:         "",
 			ResponseBody: "",
-			Swag:         strings.TrimSuffix(method.Comments.Leading.String(), "\n"),
+			Swag:         swagStr,
+			Bind:         bindStr,
 		})
 	}
 

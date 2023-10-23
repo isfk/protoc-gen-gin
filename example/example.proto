@@ -23,7 +23,7 @@ service ExampleService {
   // @Failure   404   {object}  httputil.HTTPError
   // @Failure   500   {object}  httputil.HTTPError
   // @Router    /say  [get]
-  rpc Say(SayRequest) returns (SayResponse);
+  rpc Say(SayRequest) returns (SayResponse); // 说点什么|bind=ShouldBindUri
 }
 
 message HelloRequest {

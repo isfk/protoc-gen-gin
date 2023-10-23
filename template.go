@@ -34,6 +34,7 @@ type methodDesc struct {
 	Body         string
 	ResponseBody string
 	Swag         string
+	Bind         string
 }
 
 func (s *serviceDesc) execute() string {

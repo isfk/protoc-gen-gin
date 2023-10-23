@@ -87,9 +87,10 @@ func (s ExampleService_GinServerHandlerImpl) Hello(c *gin.Context) {
 // @Failure   404   {object}  httputil.HTTPError
 // @Failure   500   {object}  httputil.HTTPError
 // @Router    /say  [get]
+// 说点什么
 func (s ExampleService_GinServerHandlerImpl) Say(c *gin.Context) {
 	var args SayRequest
-	if err := c.Bind(&args); err != nil {
+	if err := c.ShouldBindUri(&args); err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
 		return
 	}

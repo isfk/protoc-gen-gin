@@ -51,7 +51,7 @@ func New{{$svrType}}_GinServerHandler(handler {{$svrType}}_GinClientHandler) {{$
 {{ .Swag }}
 func (s {{$svrType}}_GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
 	var args {{.Request}}
-	if err := c.Bind(&args); err != nil {
+	if err := c.{{.Bind}}(&args); err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
 		return
 	}
