@@ -20,7 +20,7 @@
 //     }
 // }
 // 
-// func (h myHandler) Hello(args *example.HelloRequest) (*example.HelloResponse, error) {
+// func (h myHandler) Hello(c *gin.Context, args *example.HelloRequest) (*example.HelloResponse, error) {
 //     h.Log.Info("打印参数", slog.Any("args", args))
 //     return &example.HelloResponse{Msg: args.Name}, nil
 // }
@@ -56,7 +56,7 @@ func (s {{$svrType}}_GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
 		return
 	}
 
-	resp, err := s.Handler.{{.Name}}(&args)
+	resp, err := s.Handler.{{.Name}}(c, &args)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 500, "msg": err.Error()})
 		return
@@ -71,7 +71,7 @@ type {{$svrType}}_GinClientHandler interface {
 	{{- if ne .Comment ""}}
 	{{.Comment}}
 	{{- end}}
-	{{.Name}}(*{{.Request}}) (*{{.Reply}}, error)
+	{{.Name}}(*gin.Context, *{{.Request}}) (*{{.Reply}}, error)
 {{- end}}
 }
 
@@ -88,7 +88,7 @@ func New{{$svrType}}_GinClientHandler() {{$svrType}}_GinClientHandler {
 {{- if ne .Comment ""}}
 {{.Comment}}
 {{- end}}
-func ({{$svrType}}_GinClientHandlerImpl) {{.Name}}(args *{{.Request}}) (*{{.Reply}}, error) {
+func ({{$svrType}}_GinClientHandlerImpl) {{.Name}}(c *gin.Context, args *{{.Request}}) (*{{.Reply}}, error) {
 	return &{{.Reply}}{}, nil
 }
 {{- end}}
