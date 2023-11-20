@@ -2,7 +2,7 @@
 {{$svrName := .ServiceName}}
 
 // type myHandler {
-//     {{$svrType}}_GinClientHandlerImpl
+//     {{$svrType}}GinClientHandlerImpl
 //	   Log *slog.Logger	
 // }
 // 
@@ -13,7 +13,7 @@
 // func main () {
 //     e := gin.Default()
 //     log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-//     handler := example.NewExampleService_GinServerHandler(NewMyHandler(log))
+//     handler := example.NewExampleServiceGinServerHandler(NewMyHandler(log))
 //     e.Get("/", e.handler.Hello)
 //     if err := e.Start(":1111"); err != nil {
 //         panic(err)
@@ -25,7 +25,7 @@
 //     return &example.HelloResponse{Msg: args.Name}, nil
 // }
 
-type {{$svrType}}_GinServerHandler interface {
+type {{$svrType}}GinServerHandler interface {
 {{- range .Methods}}
 	{{- if ne .Comment ""}}
 	{{.Comment}}
@@ -34,12 +34,12 @@ type {{$svrType}}_GinServerHandler interface {
 {{- end}}
 }
 
-type {{$svrType}}_GinServerHandlerImpl struct {
-	Handler {{$svrType}}_GinClientHandler
+type {{$svrType}}GinServerHandlerImpl struct {
+	Handler {{$svrType}}GinClientHandler
 }
 
-func New{{$svrType}}_GinServerHandler(handler {{$svrType}}_GinClientHandler) {{$svrType}}_GinServerHandler {
-	return &{{$svrType}}_GinServerHandlerImpl{
+func New{{$svrType}}GinServerHandler(handler {{$svrType}}GinClientHandler) {{$svrType}}GinServerHandler {
+	return &{{$svrType}}GinServerHandlerImpl{
 		Handler: handler,
 	}
 }
@@ -49,7 +49,7 @@ func New{{$svrType}}_GinServerHandler(handler {{$svrType}}_GinClientHandler) {{$
 {{.Comment}}
 {{- end}}
 {{ .Swag }}
-func (s {{$svrType}}_GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
+func (s {{$svrType}}GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
 	var args {{.Request}}
 	if err := c.{{.Bind}}(&args); err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
@@ -66,7 +66,7 @@ func (s {{$svrType}}_GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
 }
 {{- end}}
 
-type {{$svrType}}_GinClientHandler interface {
+type {{$svrType}}GinClientHandler interface {
 {{- range .Methods}}
 	{{- if ne .Comment ""}}
 	{{.Comment}}
@@ -77,18 +77,18 @@ type {{$svrType}}_GinClientHandler interface {
 
 // 下面方法仅供参考, 具体需要自己实现
 
-type {{$svrType}}_GinClientHandlerImpl struct {
+type {{$svrType}}GinClientHandlerImpl struct {
 }
 
-func New{{$svrType}}_GinClientHandler() {{$svrType}}_GinClientHandler {
-	return &{{$svrType}}_GinClientHandlerImpl{}
+func New{{$svrType}}GinClientHandler() {{$svrType}}GinClientHandler {
+	return &{{$svrType}}GinClientHandlerImpl{}
 }
 
 {{- range .Methods}}
 {{- if ne .Comment ""}}
 {{.Comment}}
 {{- end}}
-func ({{$svrType}}_GinClientHandlerImpl) {{.Name}}(c *gin.Context, args *{{.Request}}) (*{{.Reply}}, error) {
+func ({{$svrType}}GinClientHandlerImpl) {{.Name}}(c *gin.Context, args *{{.Request}}) (*{{.Reply}}, error) {
 	return &{{.Reply}}{}, nil
 }
 {{- end}}

@@ -15,7 +15,7 @@ var _ = new(gin.Context)
 var _ = new(http.Client)
 
 // type myHandler {
-//     ExampleService_GinClientHandlerImpl
+//     ExampleServiceGinClientHandlerImpl
 //	   Log *slog.Logger
 // }
 //
@@ -26,7 +26,7 @@ var _ = new(http.Client)
 // func main () {
 //     e := gin.Default()
 //     log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
-//     handler := example.NewExampleService_GinServerHandler(NewMyHandler(log))
+//     handler := example.NewExampleServiceGinServerHandler(NewMyHandler(log))
 //     e.Get("/", e.handler.Hello)
 //     if err := e.Start(":1111"); err != nil {
 //         panic(err)
@@ -38,26 +38,26 @@ var _ = new(http.Client)
 //     return &example.HelloResponse{Msg: args.Name}, nil
 // }
 
-type ExampleService_GinServerHandler interface {
+type ExampleServiceGinServerHandler interface {
 	// Hello
 	Hello(*gin.Context)
 	// Say
 	Say(*gin.Context)
 }
 
-type ExampleService_GinServerHandlerImpl struct {
-	Handler ExampleService_GinClientHandler
+type ExampleServiceGinServerHandlerImpl struct {
+	Handler ExampleServiceGinClientHandler
 }
 
-func NewExampleService_GinServerHandler(handler ExampleService_GinClientHandler) ExampleService_GinServerHandler {
-	return &ExampleService_GinServerHandlerImpl{
+func NewExampleServiceGinServerHandler(handler ExampleServiceGinClientHandler) ExampleServiceGinServerHandler {
+	return &ExampleServiceGinServerHandlerImpl{
 		Handler: handler,
 	}
 }
 
 // Hello
 // hello
-func (s ExampleService_GinServerHandlerImpl) Hello(c *gin.Context) {
+func (s ExampleServiceGinServerHandlerImpl) Hello(c *gin.Context) {
 	var args HelloRequest
 	if err := c.Bind(&args); err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
@@ -88,7 +88,7 @@ func (s ExampleService_GinServerHandlerImpl) Hello(c *gin.Context) {
 // @Failure   500   {object}  httputil.HTTPError
 // @Router    /say  [get]
 // 说点什么
-func (s ExampleService_GinServerHandlerImpl) Say(c *gin.Context) {
+func (s ExampleServiceGinServerHandlerImpl) Say(c *gin.Context) {
 	var args SayRequest
 	if err := c.ShouldBindUri(&args); err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 400, "msg": err.Error()})
@@ -104,7 +104,7 @@ func (s ExampleService_GinServerHandlerImpl) Say(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"code": 0, "data": resp})
 }
 
-type ExampleService_GinClientHandler interface {
+type ExampleServiceGinClientHandler interface {
 	// Hello
 	Hello(*gin.Context, *HelloRequest) (*HelloResponse, error)
 	// Say
@@ -113,19 +113,19 @@ type ExampleService_GinClientHandler interface {
 
 // 下面方法仅供参考, 具体需要自己实现
 
-type ExampleService_GinClientHandlerImpl struct {
+type ExampleServiceGinClientHandlerImpl struct {
 }
 
-func NewExampleService_GinClientHandler() ExampleService_GinClientHandler {
-	return &ExampleService_GinClientHandlerImpl{}
+func NewExampleServiceGinClientHandler() ExampleServiceGinClientHandler {
+	return &ExampleServiceGinClientHandlerImpl{}
 }
 
 // Hello
-func (ExampleService_GinClientHandlerImpl) Hello(c *gin.Context, args *HelloRequest) (*HelloResponse, error) {
+func (ExampleServiceGinClientHandlerImpl) Hello(c *gin.Context, args *HelloRequest) (*HelloResponse, error) {
 	return &HelloResponse{}, nil
 }
 
 // Say
-func (ExampleService_GinClientHandlerImpl) Say(c *gin.Context, args *SayRequest) (*SayResponse, error) {
+func (ExampleServiceGinClientHandlerImpl) Say(c *gin.Context, args *SayRequest) (*SayResponse, error) {
 	return &SayResponse{}, nil
 }

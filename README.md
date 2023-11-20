@@ -30,7 +30,7 @@ import (
 )
 
 type myHandler struct {
-	example.ExampleService_GinClientHandlerImpl
+	example.ExampleServiceGinClientHandlerImpl
 	log *slog.Logger
 }
 
@@ -43,7 +43,7 @@ func main() {
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{}))
 
-	handler := example.NewExampleService_GinServerHandler(NewMyHandler(log))
+	handler := example.NewExampleServiceGinServerHandler(NewMyHandler(log))
 
 	e.GET("/hello", handler.Hello)
 	e.GET("/say", handler.Say)
