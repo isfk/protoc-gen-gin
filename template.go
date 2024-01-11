@@ -7,8 +7,8 @@ import (
 	"text/template"
 )
 
-//go:embed echoTemplate.tpl
-var echoTemplate string
+//go:embed ginTemplate.tpl
+var ginTemplate string
 
 type serviceDesc struct {
 	ServiceType string // Greeter
@@ -26,7 +26,7 @@ type methodDesc struct {
 	Request      string
 	Reply        string
 	Comment      string
-	// echo_rule
+	// gin_rule
 	Path         string
 	Method       string
 	HasVars      bool
@@ -43,7 +43,7 @@ func (s *serviceDesc) execute() string {
 		s.MethodSets[m.Name] = m
 	}
 	buf := new(bytes.Buffer)
-	tmpl, err := template.New("echo").Parse(strings.TrimSpace(echoTemplate))
+	tmpl, err := template.New("gin").Parse(strings.TrimSpace(ginTemplate))
 	if err != nil {
 		panic(err)
 	}

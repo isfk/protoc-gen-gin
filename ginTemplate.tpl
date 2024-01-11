@@ -48,7 +48,9 @@ func New{{$svrType}}GinServerHandler(handler {{$svrType}}GinClientHandler) {{$sv
 {{- if ne .Comment ""}}
 {{.Comment}}
 {{- end}}
+{{- if ne .Swag ""}}
 {{ .Swag }}
+{{- end}}
 func (s {{$svrType}}GinServerHandlerImpl) {{.Name}}(c *gin.Context) {
 	var args {{.Request}}
 	if err := c.{{.Bind}}(&args); err != nil {
